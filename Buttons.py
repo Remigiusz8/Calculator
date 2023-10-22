@@ -7,15 +7,23 @@ def layout():
 
     def on_click(value):
         entry.config(state="normal")
-        if ord(value) not in [45, 43, 61, 47, 42]:
+        if ord(value) not in [45, 43, 61, 47, 42, 67]:
             entry.insert(tk.END, value)
-        elif ord(value) == 61:
-            container.clear()
         else:
-            container.append(entry.get())
+            final = collect(value)
             entry.delete(0, tk.END)
-        entry.config(state="readonly")
-        print(value)
+        if ord(value) == 61:
+            entry.insert(tk.END, final)
+        entry.config(state="readonly")    
+
+    def collect(value):
+        container.append(entry.get())
+        if ord(value) in [45, 43, 61, 47, 42]:
+            container.append(value)
+        elif ord(value) == 67:
+            container.clear()
+        print(container)
+        return calc.calculate(container)
 
     root = tk.Tk()
     root.title("Calculator")
@@ -23,16 +31,16 @@ def layout():
     entry = tk.Entry(root, font=20, textvariable="info", state="readonly", justify=tk.CENTER)
     entry.grid(column=0, row=0, columnspan=4)
     
-    clr = tk.Button(root, text="clr", font=20, command=lambda:on_click(' '))
+    clr = tk.Button(root, text="C", font=20, command=lambda:on_click('C'))
     clr.grid(column=0, row=1, sticky='nesw')
 
-    divider = tk.Button(root, text="/", font=20, command=lambda:[on_click('/'), calc.Select_operation('/')])
+    divider = tk.Button(root, text="/", font=20, command=lambda:[on_click('/')])
     divider.grid(column=1, row=1, sticky='nesw')
 
     multiplier = tk.Button(root, text="*", font=20, command=lambda:on_click('*'))
     multiplier.grid(column=2, row=1, sticky='nesw')
 
-    minus = tk.Button(root, text="-", font=20, command=lambda:[on_click('-'), calc.Select_operation('-')])
+    minus = tk.Button(root, text="-", font=20, command=lambda:[on_click('-')])
     minus.grid(column=3, row=1, sticky='nesw')
 
     one = tk.Button(root, text="1", font=20, command=lambda:on_click('1'))
@@ -44,7 +52,7 @@ def layout():
     three = tk.Button(root, text="3", font=20, command=lambda:on_click('3'))
     three.grid(column=2, row=2, sticky='nesw')
 
-    plus = tk.Button(root, text="+", font=20, command=lambda:[on_click('+'), calc.Select_operation('+s')])
+    plus = tk.Button(root, text="+", font=20, command=lambda:[on_click('+')])
     plus.grid(column=3, row=2, rowspan=2, sticky='nesw')
 
     four = tk.Button(root, text="4", font=20, command=lambda:on_click('4'))
